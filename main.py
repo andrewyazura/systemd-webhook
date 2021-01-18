@@ -1,5 +1,6 @@
 import json
-import os
+
+import pydbus
 import web
 
 urls = (
@@ -7,6 +8,9 @@ urls = (
 )
 
 app = web.application(urls, globals())
+
+system_bus = pydbus.SystemBus()
+systemd = system_bus.get('.systemd1')
 
 
 class hooks:
@@ -18,7 +22,7 @@ class hooks:
         repo_name = data['repository']['name']
 
         if not action or action == 'push':
-            os.system(f'sudo systemctl restart {repo_name}.service')
+            systemd.RestartUnit(f'{repo_name}.service', 'fail')
 
 
 if __name__ == "__main__":
