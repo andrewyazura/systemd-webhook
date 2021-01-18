@@ -4,7 +4,7 @@ Documentation=https://github.com/andrewyazura/systemd-webhook
 After=network-online.target
 
 [Service]
-ExecStart=sudo /path/to/venv/python /path/to/main.py 4567
+ExecStart=sudo /path/to/python /path/to/main.py 4567
 Restart=always
 
 [Install]

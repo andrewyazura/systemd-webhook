@@ -1,6 +1,6 @@
 import json
 
-import pydbus
+import dbus
 import web
 
 urls = (
@@ -8,9 +8,17 @@ urls = (
 )
 
 app = web.application(urls, globals())
+bus = dbus.SystemBus()
 
-system_bus = pydbus.SystemBus()
-systemd = system_bus.get('.systemd1')
+systemd = bus.get_object(
+    'org.freedesktop.systemd1',
+    '/org/freedesktop/systemd1'
+)
+
+manager = dbus.Interface(
+    systemd,
+    'org.freedesktop.systemd1.Manager'
+)
 
 
 class hooks:
@@ -22,7 +30,7 @@ class hooks:
         repo_name = data['repository']['name']
 
         if not action or action == 'push':
-            systemd.RestartUnit(f'{repo_name}.service', 'fail')
+            manager.RestartUnit(f'{repo_name}.service', 'fail')
 
 
 if __name__ == "__main__":
