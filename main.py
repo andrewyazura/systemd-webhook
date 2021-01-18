@@ -26,10 +26,10 @@ class hooks:
         data = web.data()
         data = json.loads(data)
 
-        action = data.get('action', None)
+        action = web.ctx.env.get('X-GitHub-Event', None)
         repo_name = data['repository']['name']
 
-        if not action or action == 'push':
+        if action == 'push':
             manager.RestartUnit(f'{repo_name}.service', 'fail')
 
 
