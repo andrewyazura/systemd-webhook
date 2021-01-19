@@ -20,7 +20,7 @@ except ModuleNotFoundError:
 
 
 urls = (
-    '/.*', 'hooks'
+    '/github-webhook', 'hooks'
 )
 
 app = web.application(urls, globals())
